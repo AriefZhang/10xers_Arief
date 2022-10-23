@@ -1,18 +1,28 @@
 import { useEffect } from "react"
-import { connect, useDispatch } from "react-redux"
-import { StyleSheet, View, FlatList, SafeAreaView, Image, Text } from "react-native"
+import { useDispatch, useSelector } from "react-redux"
+import { StyleSheet, View, FlatList, SafeAreaView, Image, Dimensions, Text } from "react-native"
 import { setWalletContent, setHomeLoading } from "../redux/action/token"
 import { getWalletContent } from '../../api/10xers'
+import HomeCardCollection from '../components/card'
+
+let windowWidth = Dimensions.get("window").width;
+
+const widthHomeCard = (windowWidth - 30) * 0.5
+
+const renderItem = ({ item }) => {
+  return (
+    <HomeCardCollection data={item} />
+  );
+};
 
 const Home = () => {
-  console.log('line atas')
   const dispatch = useDispatch()
+  const { walletContents, isHomeLoading } = useSelector(store => store.tokenReducer)
 
   useEffect(() => {
     getWalletContent
       .get()
       .then(({data}) => {
-        console.log(data, 'INI RESPONSE')
         dispatch(setWalletContent(data))
       })
       .catch((err) => console.log(err))
@@ -21,9 +31,12 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.homeContainer}>
-      <View style={styles.cardWallet}>
-        <Text>Test</Text>
-      </View>
+      <FlatList
+        numColumns={2}
+        data={walletContents}
+        renderItem={renderItem}
+        keyExtractor={(item, index) => index.toString()}
+      ></FlatList>
     </SafeAreaView>
   )
 }
@@ -31,25 +44,29 @@ const Home = () => {
 const styles = StyleSheet.create({
   homeContainer: {
     flex: 1,
-    padding: 12
+    padding: 5,
+    paddingBottom: 10
   },
   cardWallet: {
-    backgroundColor: '#7DE5ED',
-    height: 100,
+    backgroundColor: '#5DA7DB',
+    height: widthHomeCard,
+    width: widthHomeCard,
+    borderRadius: 8,
+    overflow: "hidden",
+    margin: 5,
+    shadowColor: "#000000",
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.35,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  img: {
     width: '100%',
-    borderRadius: 8
+    height: '100%'
   }
 })
 
-const mapStateToProps = (state) => {
-  const { walletContents, isHomeLoading } = state.tokenReducer;
-
-  console.log(walletContents, '<<< Wallet Content')
-
-  return {
-    walletContents,
-    isHomeLoading
-  }
-}
-
-export default connect(mapStateToProps, { setWalletContent, setHomeLoading })(Home)
+export default Home
