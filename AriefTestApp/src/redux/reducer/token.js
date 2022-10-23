@@ -2,7 +2,7 @@ const tokenState = {
   walletContents: [],
   isHomeLoading: true,
   isDetailsLoading: true,
-  currentCollectionExternalId: null,
+  currentWalletContent: {},
   collectionDetail: {},
   collectionStats: []
 };
@@ -22,10 +22,10 @@ export default function reducer(state = tokenState, action) {
         isHomeLoading: payload
       }
 
-    case "token/collectionExternalId":
+    case "token/currentWalletContent":
       return {
         ...state,
-        currentCollectionExternalId: payload
+        currentWalletContent: payload
       }
 
     case "token/CollectionDetail":

@@ -12,9 +12,9 @@ export function setHomeLoading(payload) {
   }
 }
 
-export function setCollectionExternalId(payload) {
+export function setCurrentWalletContent(payload) {
   return {
-    type: "token/collectionExternalId",
+    type: "token/currentWalletContent",
     payload
   }
 }

@@ -1,14 +1,22 @@
 import { StyleSheet, View, Image, Dimensions, TouchableOpacity, Text } from "react-native"
+import { useDispatch } from 'react-redux'
+import { setCurrentWalletContent } from "../redux/action/token"
 
 let windowWidth = Dimensions.get("window").width;
 
 const widthHomeCard = (windowWidth - 30) * 0.5
 
 export default function HomeCardCollection ({ navigation, data, view }) {
+  const dispatch = useDispatch()
+
+  const setWalletContent = () => {
+    dispatch(setCurrentWalletContent(data))
+    view(data.id)
+  }
 
   return (
-    <TouchableOpacity style={styles.cardWallet} onPress={() => view(data.id)}>
-      <Image source={{ uri: data.collections[0].image_url }} style={styles.img} />
+    <TouchableOpacity style={styles.cardWallet} onPress={setWalletContent}>
+      <Image source={{ uri: data.image_url }} style={styles.img} />
       <View style={styles.badge}>
         <Image source={require('../assets/icons8-picture-48.png')} style={styles.badgeIcon} />
         <Text style={styles.badgeText}>{data.collections.length}</Text>

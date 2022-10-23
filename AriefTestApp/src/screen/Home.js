@@ -18,6 +18,7 @@ const groupingColection = (value) => {
     if (!listColection[collection.id]) {
       listColection[collection.id] = {
         id: collection.external_id,
+        image_url: collection.image_url,
         name: collection.name,
         collections: []
       }
