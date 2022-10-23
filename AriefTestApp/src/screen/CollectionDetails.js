@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { StyleSheet, View, FlatList, SafeAreaView, Image, Dimensions, Text, TouchableOpacity } from "react-native"
 
@@ -13,7 +13,8 @@ const widthDetailCard = (windowWidth - 30) * 0.5
 export default function CollectionDetails({ route, navigation }) {
   const { id } = route.params
   const dispatch = useDispatch()
-
+  const [isUpOrDown, setIsUpOrDown] = useState()
+  
   const { currentWalletContent, collectionDetail, collectionStats, isDetailsLoading } = useSelector(store => store.tokenReducer)
 
   const checkCurrentCollectionId = (collection) => {
@@ -25,6 +26,9 @@ export default function CollectionDetails({ route, navigation }) {
     .get()
     .then(({data}) => {
       const currentCollection = checkCurrentCollectionId(data)
+      const oneDay = Number(currentCollection.one_day_change)
+      if (oneDay >= 0) setIsUpOrDown('up')
+      else if (oneDay < 0) setIsUpOrDown('down')
       dispatch(setCollectionDetail(currentCollection))
     })
   }, [dispatch])
@@ -47,16 +51,22 @@ export default function CollectionDetails({ route, navigation }) {
         <Image source={{uri: collectionDetail.image_url}} style={styles.collectionImg} />
         <View style={styles.informationWrapper}>
           <View style={styles.informationContent}>
-            <Text>ITEMS</Text>
+            <Text style={styles.informationContentTitle}>ITEMS</Text>
             <Text style={styles.informationContentData}>{currentWalletContent.collections.length}</Text>
           </View>
           <View style={styles.informationContent}>
-            <Text>TOTAL VOLUME</Text>
+            <Text style={styles.informationContentTitle}>TOTAL VOLUME</Text>
             <Text style={styles.informationContentData}>{formatNum(collectionDetail.total_volume)}</Text>
           </View>
           <View style={styles.informationContent}>
-            <Text>1 DAY</Text>
-            <Text style={styles.informationContentData}>{formatNum(collectionDetail.one_day_change)}</Text>
+            <Text style={styles.informationContentTitle}>1 DAY</Text>
+            {
+              isUpOrDown === 'up' ? (
+                <Text style={styles.informationContentDataUp}>{formatNum(collectionDetail.one_day_change)}</Text>
+              ) : (
+                <Text style={styles.informationContentDataDown}>{formatNum(collectionDetail.one_day_change)}</Text>
+              )
+            }
           </View>
         </View>
       </View>
@@ -129,8 +139,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
+  informationContentTitle: {
+    color: '#BDBDBD',
+    fontSize: 16,
+    fontWeight: '400'
+  },
   informationContentData: {
     color: '#000000',
+    fontSize: 16,
+    fontWeight: '500'
+  },
+  informationContentDataUp: {
+    color: '#3D8361',
+    fontSize: 16,
+    fontWeight: '500'
+  },
+  informationContentDataDown: {
+    color: '#E0144C',
     fontSize: 16,
     fontWeight: '500'
   }
