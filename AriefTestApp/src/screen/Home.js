@@ -9,12 +9,6 @@ let windowWidth = Dimensions.get("window").width;
 
 const widthHomeCard = (windowWidth - 30) * 0.5
 
-const renderItem = ({ item }) => {
-  return (
-    <HomeCardCollection data={item} />
-  )
-}
-
 const groupingColection = (value) => {
   let listColection = {}
 
@@ -23,6 +17,7 @@ const groupingColection = (value) => {
 
     if (!listColection[collection.id]) {
       listColection[collection.id] = {
+        id: collection.external_id,
         name: collection.name,
         collections: []
       }
@@ -39,7 +34,7 @@ const groupingColection = (value) => {
   return groupOfCollection
 }
 
-const Home = () => {
+const Home = ({ navigation }) => {
   const dispatch = useDispatch()
   const { walletContents, isHomeLoading } = useSelector(store => store.tokenReducer)
 
@@ -53,6 +48,16 @@ const Home = () => {
       .catch((err) => console.log(err))
       .finally(() => dispatch(setHomeLoading(false)))
   }, [dispatch])
+
+  const view = (id) => {
+    navigation.navigate("Details", { id })
+  }
+
+  const renderItem = ({ item }) => {
+    return (
+      <HomeCardCollection data={item} view={view} />
+    )
+  }
 
   return (
     <SafeAreaView style={styles.homeContainer}>

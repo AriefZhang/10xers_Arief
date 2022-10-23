@@ -4,10 +4,10 @@ let windowWidth = Dimensions.get("window").width;
 
 const widthHomeCard = (windowWidth - 30) * 0.5
 
-export default function HomeCardCollection ({ navigation, data }) {
+export default function HomeCardCollection ({ navigation, data, view }) {
 
   return (
-    <TouchableOpacity style={styles.cardWallet}>
+    <TouchableOpacity style={styles.cardWallet} onPress={() => view(data.id)}>
       <Image source={{ uri: data.collections[0].image_url }} style={styles.img} />
       <View style={styles.badge}>
         <Image source={require('../assets/icons8-picture-48.png')} style={styles.badgeIcon} />

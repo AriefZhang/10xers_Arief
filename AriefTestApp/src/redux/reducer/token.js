@@ -1,6 +1,10 @@
 const tokenState = {
   walletContents: [],
-  isHomeLoading: true
+  isHomeLoading: true,
+  isDetailsLoading: true,
+  currentCollectionExternalId: null,
+  collectionDetail: {},
+  collectionStats: []
 };
 
 export default function reducer(state = tokenState, action) {
@@ -11,11 +15,35 @@ export default function reducer(state = tokenState, action) {
         ...state,
         walletContents: payload
       }
-    
+
     case "token/homeLoading":
       return {
         ...state,
         isHomeLoading: payload
+      }
+
+    case "token/collectionExternalId":
+      return {
+        ...state,
+        currentCollectionExternalId: payload
+      }
+
+    case "token/CollectionDetail":
+      return {
+        ...state,
+        collectionDetail: payload
+      }
+
+    case "token/CollectionStatsById":
+      return {
+        ...state,
+        collectionStats: payload
+      }
+
+    case "token/detailsLoading":
+      return {
+        ...state,
+        isDetailsLoading: payload
       }
 
     default:

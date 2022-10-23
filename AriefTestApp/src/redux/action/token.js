@@ -11,3 +11,24 @@ export function setHomeLoading(payload) {
     payload
   }
 }
+
+export function setCollectionExternalId(payload) {
+  return {
+    type: "token/collectionExternalId",
+    payload
+  }
+}
+
+export function setCollectionDetail(payload) {
+  return {
+    type: "token/CollectionDetail",
+    payload
+  }
+}
+
+export function setCollectionStatsById(payload) {
+  return {
+    type: "token/CollectionStatsById",
+    payload
+  }
+}
