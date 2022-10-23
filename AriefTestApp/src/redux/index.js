@@ -1,5 +1,11 @@
-import { createStore, applyMiddleware } from "redux"
-import thunk from "redux-thunk"
-import { reducer } from "./reducer/index"
+import { configureStore  } from "@reduxjs/toolkit"
+import tokenReducer from './reducer/token'
 
-export const store = createStore(reducer, applyMiddleware(thunk))
+export const store = configureStore({
+  reducer: {
+    tokenReducer
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  })
+})
