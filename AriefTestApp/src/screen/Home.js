@@ -12,8 +12,32 @@ const widthHomeCard = (windowWidth - 30) * 0.5
 const renderItem = ({ item }) => {
   return (
     <HomeCardCollection data={item} />
-  );
-};
+  )
+}
+
+const groupingColection = (value) => {
+  let listColection = {}
+
+  value.forEach(token => {
+    let collection = JSON.parse(token.collection_json)
+
+    if (!listColection[collection.id]) {
+      listColection[collection.id] = {
+        name: collection.name,
+        collections: []
+      }
+    }
+    listColection[collection.id].collections.push(token)
+  })
+
+  let groupOfCollection = []
+
+  for (let list in listColection) {
+    groupOfCollection.push(listColection[list])
+  }
+
+  return groupOfCollection
+}
 
 const Home = () => {
   const dispatch = useDispatch()
@@ -23,7 +47,8 @@ const Home = () => {
     getWalletContent
       .get()
       .then(({data}) => {
-        dispatch(setWalletContent(data))
+        let collections = groupingColection(data)
+        dispatch(setWalletContent(collections))
       })
       .catch((err) => console.log(err))
       .finally(() => dispatch(setHomeLoading(false)))

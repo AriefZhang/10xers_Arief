@@ -5,17 +5,16 @@ let windowWidth = Dimensions.get("window").width;
 const widthHomeCard = (windowWidth - 30) * 0.5
 
 export default function HomeCardCollection ({ navigation, data }) {
-  const collection = JSON.parse(data.collection_json)
 
   return (
     <TouchableOpacity style={styles.cardWallet}>
-      <Image source={{ uri: data.image_url }} style={styles.img} />
+      <Image source={{ uri: data.collections[0].image_url }} style={styles.img} />
       <View style={styles.badge}>
-        <Image source={require('../assets/icons8-diamond-100.png')} style={styles.badgeIcon} />
-        <Text style={styles.badgeText}>#{data.token_id}</Text>
+        <Image source={require('../assets/icons8-picture-48.png')} style={styles.badgeIcon} />
+        <Text style={styles.badgeText}>{data.collections.length}</Text>
       </View>
       <View style={styles.cardTitleWrapper}>
-        <Text style={styles.cardTitle}>{collection.name}</Text>
+        <Text style={styles.cardTitle}>{data.name}</Text>
       </View>
     </TouchableOpacity>
   )
@@ -72,14 +71,14 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   badgeText: {
-    color: '#E6CBA8',
-    fontSize: 14,
-    lineHeight: 18,
+    color: '#FFFFFF',
+    fontSize: 18,
+    lineHeight: 20,
     fontWeight: '600'
   },
   badgeIcon: {
     height: 24,
     width: 24,
-    marginRight: 4
+    marginRight: 8
   }
 })
