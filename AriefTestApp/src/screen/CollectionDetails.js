@@ -5,17 +5,19 @@ import { StyleSheet, View, FlatList, SafeAreaView, Image, Dimensions, Text, Touc
 import { getCollection, getCollectionStats } from '../../api/10xers'
 import { setCollectionDetail, setCollectionStatsById } from "../redux/action/token"
 
+import LineChart from '../components/chart'
+import ButtonChart from '../components/button'
+
 let windowWidth = Dimensions.get("window").width;
 
 const widthDetailCard = (windowWidth - 30) * 0.5
-
 
 export default function CollectionDetails({ route, navigation }) {
   const { id } = route.params
   const dispatch = useDispatch()
   const [isUpOrDown, setIsUpOrDown] = useState()
   
-  const { currentWalletContent, collectionDetail, collectionStats, isDetailsLoading } = useSelector(store => store.tokenReducer)
+  const { currentWalletContent, collectionDetail, isDetailsLoading } = useSelector(store => store.tokenReducer)
 
   const checkCurrentCollectionId = (collection) => {
     return collection.filter(list => list.external_id === id)[0]
@@ -23,14 +25,20 @@ export default function CollectionDetails({ route, navigation }) {
   
   useEffect(() => {
     getCollection
-    .get()
+    .get('collections')
     .then(({data}) => {
       const currentCollection = checkCurrentCollectionId(data)
       const oneDay = Number(currentCollection.one_day_change)
       if (oneDay >= 0) setIsUpOrDown('up')
       else if (oneDay < 0) setIsUpOrDown('down')
       dispatch(setCollectionDetail(currentCollection))
+
+      return getCollectionStats.get(`collection_stats?collection_id=${currentCollection.id}`)
     })
+    .then(({data}) => {
+      dispatch(setCollectionStatsById(data))
+    })
+    .catch(err => console.error(err))
   }, [dispatch])
 
   const view = () => {
@@ -69,6 +77,13 @@ export default function CollectionDetails({ route, navigation }) {
             }
           </View>
         </View>
+      </View>
+      <View style={styles.chartWrapper}>
+        <View style={styles.buttonChartWrapper}>
+          <Text>{currentWalletContent.name}</Text>
+          <ButtonChart />
+        </View>
+        <LineChart />
       </View>
     </SafeAreaView>
   )
@@ -158,5 +173,16 @@ const styles = StyleSheet.create({
     color: '#E0144C',
     fontSize: 16,
     fontWeight: '500'
+  },
+  chartWrapper: {
+    paddingHorizontal: 15,
+    paddingTop: 150,
+    backgroundColor: '#FFFFFF',
+    position: 'relative'
+  },
+  buttonChartWrapper: {
+    position: 'absolute',
+    top: 50,
+    right: 30
   }
 })
