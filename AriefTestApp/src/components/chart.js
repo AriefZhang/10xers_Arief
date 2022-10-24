@@ -33,7 +33,7 @@ export default function Chart() {
 }
 
 const computeDataChart = (collectionStats) => {
-  return collectionStats.map(stat => Number(stat.floor_price_eth)).slice(0,30)
+  return collectionStats.map(stat => Number(stat.floor_price_eth)).slice(0,30).reverse()
 }
 
 const styles = StyleSheet.create({

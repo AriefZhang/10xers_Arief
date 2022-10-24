@@ -80,8 +80,12 @@ export default function CollectionDetails({ route, navigation }) {
       </View>
       <View style={styles.chartWrapper}>
         <View style={styles.buttonChartWrapper}>
-          <Text>{currentWalletContent.name}</Text>
+          <Text style={styles.textName}>{currentWalletContent.name}</Text>
           <ButtonChart />
+        </View>
+        <View style={styles.ethereumWrapper}>
+          <Image style={styles.iconEthereum} source={require('../assets/icons8-ethereum-100.png')}/>
+          <Text style={styles.textEthereum}>{collectionDetail.total_sales}</Text>
         </View>
         <LineChart />
       </View>
@@ -183,6 +187,37 @@ const styles = StyleSheet.create({
   buttonChartWrapper: {
     position: 'absolute',
     top: 50,
-    right: 30
+    right: 30,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-end'
+  },
+  textName: {
+    color: '#16213E',
+    textAlign: 'right',
+    fontSize: 28,
+    fontWeight: '600',
+    marginBottom: 6
+  },
+  ethereumWrapper: {
+    position: 'absolute',
+    zIndex: 5,
+    left: 20,
+    top: 60,
+    width: 200,
+    height: 50,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  iconEthereum: {
+    width: 25,
+    height: 25
+  },
+  textEthereum: {
+    color: '#16213E',
+    fontSize: 20,
+    fontWeight: '600',
+    marginLeft: 6
   }
 })
