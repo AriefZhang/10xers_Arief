@@ -7,6 +7,7 @@ import { setCollectionDetail, setCollectionStatsById } from "../redux/action/tok
 
 import LineChart from '../components/chart'
 import ButtonChart from '../components/button'
+import DetailCardCollection from '../components/cardDetail'
 
 let windowWidth = Dimensions.get("window").width;
 
@@ -49,6 +50,12 @@ export default function CollectionDetails({ route, navigation }) {
     return Number(number).toFixed(4)
   }
 
+  const renderItem = ({ item }) => {
+    return (
+      <DetailCardCollection data={item} />
+    )
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.bannerWrapper}>
@@ -88,6 +95,18 @@ export default function CollectionDetails({ route, navigation }) {
           <Text style={styles.textEthereum}>{collectionDetail.total_sales}</Text>
         </View>
         <LineChart />
+        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+          <Text style={{...styles.textEthereum, paddingVertical: 25}}>Recent Activity</Text>
+          <Image style={styles.iconEthereum} source={require('../assets/icons8-right-96.png')}/>
+        </View>
+      </View>
+      <View style={styles.contentWrapper}>
+        <FlatList
+          horizontal
+          data={currentWalletContent.collections}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
       </View>
     </SafeAreaView>
   )
@@ -219,5 +238,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     marginLeft: 6
+  },
+  contentWrapper: {
+    width: windowWidth,
+    height: '100%',
+    borderTopColor: '#472D2D',
+    borderStyle: 'solid',
+    padding: 5
   }
 })
